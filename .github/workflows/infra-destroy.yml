@@ -23,9 +23,9 @@ jobs:
       - name: Configuration the AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::025066273464:role/github-svc-tf-provision-iac
+          role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
           aws-region: ap-southeast-1
-          role-session-name: github-actions-destroy-iac
+          role-session-name: ${{ secrets.ROLE_SESSION_NAME }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
