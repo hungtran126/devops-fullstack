@@ -7,6 +7,10 @@ on:
         description: 'Type "confirm" to destroy the infrastructure'
         required: true
         default: 'confirm'
+  push:
+    branches:
+      - main
+      - dev
 
 permissions:
   id-token: write
