@@ -3,7 +3,7 @@
 **PROJECT STRUCTURE**
 
 1. app.tf → Contains Terraform scripts for provisioning infrastructure.
-2. .github/workflows → Contains CI/CD pipeline configuaration.
+2. .github/workflows → Contains CI/CD pipeline configuration.
 3. report-resources → Contains the images for reporting.
 4. other → coming soon
 

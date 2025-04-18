@@ -15,7 +15,7 @@ permissions:
   contents: read
 
 jobs:
-  validate_tf:
+  validate-terraform:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -39,7 +39,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     if: always()
-    needs: validate_tf
+    needs: validate-terraform
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -59,12 +59,11 @@ jobs:
       - name: Terraform Init
         working-directory: app.tf
         run: terraform init --backend-config="key=github_ci/infra/${{ github.ref_name }}-tf.tfstate"
-        # run: cd app.tf && terraform init
 
       - name: Terraform Plan for ${{ github.ref_name }}
         if: github.event_name == 'push' && github.ref == 'refs/heads/${{ github.ref_name }}'
-        # run: terraform plan -var-file=app.tf/envs/${{ github.ref_name }}.tfvars
-        run: cd app.tf && terraform plan -var-file=envs/${{ github.ref_name }}.tfvars
+        working-directory: app.tf
+        run: terraform plan -var-file=envs/${{ github.ref_name }}.tfvars
   deploy:
     runs-on: ubuntu-latest
     needs: build
@@ -90,5 +89,5 @@ jobs:
 
       - name: Terraform Apply for ${{ github.ref_name }}
         if: github.event_name == 'push' && github.ref == 'refs/heads/${{ github.ref_name }}'
-        # run: terraform apply -var-file=app.tf/envs/${{ github.ref_name }}.tfvars --auto-approve
-        run: cd app.tf && terraform apply -var-file=envs/${{ github.ref_name }}.tfvars --auto-approve
+        working-directory: app.tf
+        run: terraform apply -var-file=envs/${{ github.ref_name }}.tfvars --auto-approve
