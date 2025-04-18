@@ -57,7 +57,8 @@ jobs:
           terraform_version: 1.11.3
 
       - name: Terraform Init
-        run: cd app.tf && terraform init --backend-config="key=github_ci/infra/${{ github.ref_name }}-tf.tfstate" -input=false
+        working-directory: app.tf
+        run: terraform init --backend-config="key=github_ci/infra/${{ github.ref_name }}-tf.tfstate"
         # run: cd app.tf && terraform init
 
       - name: Terraform Plan for ${{ github.ref_name }}
@@ -84,8 +85,8 @@ jobs:
           terraform_version: 1.11.3
 
       - name: Terraform Init
-        # run: terraform init --backend-config="key=github_ci/infra/${{ github.ref_name }}-tf.tfstate"
-        run: cd app.tf && terraform init
+        working-directory: app.tf
+        run: terraform init --backend-config="key=github_ci/infra/${{ github.ref_name }}-tf.tfstate"
 
       - name: Terraform Apply for ${{ github.ref_name }}
         if: github.event_name == 'push' && github.ref == 'refs/heads/${{ github.ref_name }}'
