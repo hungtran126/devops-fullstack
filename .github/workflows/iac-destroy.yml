@@ -33,8 +33,8 @@ jobs:
           terraform_version: 1.11.3
 
       - name: Terraform Init
-        # run: terraform init --backend-config="key=github_ci/infra/${{ github.ref_name }}-tf.tfstate"
-        run: cd app.tf && terraform init
+        run: cd app.tf && terraform init --backend-config="key=github_ci/infra/${{ github.ref_name }}-tf.tfstate"
+        # run: cd app.tf && terraform init
 
       - name: Terraform Plan
         run: cd app.tf && terraform plan -destroy -var-file=envs/${{ github.ref_name }}.tfvars
