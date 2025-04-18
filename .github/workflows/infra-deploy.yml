@@ -69,6 +69,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.11.3
+
       - name: Terraform Apply for ${{ github.ref_name }}
         if: github.event_name == 'push' && github.ref == 'refs/heads/${{ github.ref_name }}'
         # run: terraform apply -var-file=app.tf/envs/${{ github.ref_name }}.tfvars --auto-approve
