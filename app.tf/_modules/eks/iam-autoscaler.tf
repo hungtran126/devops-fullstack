@@ -1,10 +1,10 @@
 resource "aws_iam_role" "eks_cluster_autoscaler" {
   assume_role_policy = data.aws_iam_policy_document.eks_cluster_autoscaler_assume_role_policy.json
-  name               = "eks-cluster-autoscaler"
+  name               = var.eks_cluster_autoscaler_name
 }
 
 resource "aws_iam_policy" "eks_cluster_autoscaler" {
-  name = "eks-cluster-autoscaler"
+  name = var.eks_cluster_autoscaler_name
   policy = jsonencode({
     Statement = [{
       Action = [
