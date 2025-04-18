@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket = "hungtranbucketpractice"
+    bucket = "bucket-fullstack"
     # key    = "dev-tf.tfstate"
     region = "ap-southeast-1"
   }
