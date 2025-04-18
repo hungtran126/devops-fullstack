@@ -33,12 +33,13 @@ jobs:
           terraform_version: 1.11.3
 
       - name: Terraform Init
-        run: terraform init --backend-config="key=github_ci/infra/${{ github.ref_name }}-tf.tfstate"
+        # run: terraform init --backend-config="key=github_ci/infra/${{ github.ref_name }}-tf.tfstate"
+        run: terraform init
 
       - name: Terraform Plan
-        run: terraform plan -destroy -var-file=envtfvars/${{ github.ref_name }}.tfvars
+        run: terraform plan -destroy -var-file=app.tf/envs/${{ github.ref_name }}.tfvars
 
       - name: Terraform Destroy
         if: inputs.confirmation == 'confirm'
-        run: terraform destroy -var-file=envtfvars/${{ github.ref_name }}.tfvars --auto-approve
+        run: terraform destroy -var-file=app.tf/envs/${{ github.ref_name }}.tfvars --auto-approve
 
