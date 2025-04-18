@@ -34,7 +34,7 @@ jobs:
           #skip_rules:
           #config_path:
 
-  terraform:
+  build:
     runs-on: ubuntu-latest
     if: always()
     needs: validate_tf
@@ -42,12 +42,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Configuration the AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
-          aws-region: ap-southeast-1
-          role-session-name: ${{ secrets.ROLE_SESSION_NAME }}
+      # - name: Configuration the AWS Credentials
+      #   uses: aws-actions/configure-aws-credentials@v4
+      #   with:
+      #     role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
+      #     aws-region: ap-southeast-1
+      #     role-session-name: ${{ secrets.ROLE_SESSION_NAME }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -61,8 +61,15 @@ jobs:
       - name: Terraform Plan for ${{ github.ref_name }}
         if: github.event_name == 'push' && github.ref == 'refs/heads/${{ github.ref_name }}'
         # run: terraform plan -var-file=envs/${{ github.ref_name }}.tfvars
-        run: terraform plan -var-file=envs/${{ github.ref_name }}
+        run: terraform plan -var-file=envs/${{ github.ref_name }}.tfvars
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Terraform Apply for ${{ github.ref_name }}
         if: github.event_name == 'push' && github.ref == 'refs/heads/${{ github.ref_name }}'
         # run: terraform apply -var-file=envs/${{ github.ref_name }}.tfvars --auto-approve
-        run: terraform apply -var-file=envs/${{ github.ref_name }} --auto-approve
+        run: terraform apply -var-file=envs/${{ github.ref_name }}.tfvars --auto-approve
