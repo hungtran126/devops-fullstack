@@ -57,7 +57,7 @@ jobs:
           terraform_version: 1.11.3
 
       - name: Terraform Init
-        run: cd app.tf && terraform init --backend-config="key=github_ci/infra/${{ github.ref_name }}-tf.tfstate"
+        run: cd app.tf && terraform init --backend-config="key=github_ci/infra/${{ github.ref_name }}-tf.tfstate" -input=false
         # run: cd app.tf && terraform init
 
       - name: Terraform Plan for ${{ github.ref_name }}
