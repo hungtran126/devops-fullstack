@@ -1,0 +1,100 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: fastapi-todo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-api
+  namespace: fastapi-todo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-api
+  template:
+    metadata:
+      labels:
+        app: backend-api
+    spec:
+      nodeSelector:
+        "kubernetes.io/os": linux
+      imagePullSecrets:
+        - name: dockerhub
+      containers:
+        - name: backend-api
+          image: hungtran1266/fast-api:ba6ded9bf490b45c90c0b3096611270840536147
+          resources:
+            requests:
+              cpu: "256m"
+              memory: "512Mi"
+            limits:
+              memory: "1024Mi"
+              cpu: "512m"
+          ports:
+            - containerPort: 8000
+              name: backend-api
+# ---
+# apiVersion: cert-manager.io/v1
+# kind: Certificate
+# metadata:
+#   name: app-tls-cert
+#   namespace: fastapi-todo
+# spec:
+#   secretName: app-tls
+#   dnsNames:
+#     - api.hungdevops.org
+#   duration: 8760h
+#   renewBefore: 24h
+#   issuerRef:
+#     group: cert-manager.k8s.cloudflare.com
+#     kind: OriginIssuer
+#     name: prod-issuer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-backend-api
+  namespace: fastapi-todo
+spec:
+  selector:
+    app: backend-api
+  ports:
+    - port: 80 # egress port
+      targetPort: 8000 # ingress port, containerPort
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-app-ingress
+  namespace: fastapi-todo
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    cert-manager.io/issuer: prod-issuer
+    cert-manager.io/issuer-kind: OriginIssuer
+    cert-manager.io/issuer-group: cert-manager.k8s.cloudflare.com
+    external-dns.alpha.kubernetes.io/hostname: api.hungdevops.org
+    external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    alb.ingress.kubernetes.io/scheme: "internet-facing"
+    alb.ingress.kubernetes.io/target-type: "ip"
+spec:
+  rules:
+    - host: api.hungdevops.org
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: svc-backend-api
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - api.hungdevops.org
+      secretName: app-tls
