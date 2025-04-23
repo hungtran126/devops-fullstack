@@ -18,7 +18,7 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
-          
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -30,7 +30,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -f app.api/app.dockerfile  -t ${{ secrets.DOCKER_HUB_USERNAME }}/fast-api:${{ github.sha }} .
+          docker build -f app_api/app.dockerfile  -t ${{ secrets.DOCKER_HUB_USERNAME }}/fast-api:${{ github.sha }} .
         
       - name: Push Docker image to Docker hub
         run: |
