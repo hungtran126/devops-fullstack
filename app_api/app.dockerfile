@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /app
 
 # Copy requirements and install
-COPY --chown=appuser:appgroup requirements.txt .
+COPY --chown=appuser:appgroup app_api/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy app code
@@ -36,4 +36,4 @@ USER appuser
 EXPOSE 8000
 
 # Run the app
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "app_api.main:app", "--host", "0.0.0.0", "--port", "8000"]
