@@ -24,7 +24,13 @@ COPY --chown=appuser:appgroup app.api/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy app code
-COPY ./app ./app
+COPY --chown=appuser:appgroup . .
+
+# Change ownership and permissions
+RUN chmod -R 755 /app
+
+# Switch to non-root user
+USER appuser
 
 # Expose the port the app runs on
 EXPOSE 8000
