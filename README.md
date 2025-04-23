@@ -11,3 +11,6 @@
 
 1. Deploy an EKS Cluster using CI/CD for the main/dev environments.
 ![alt text](report-resources/workflow_provisioning_infra.png)
+
+1. Build and Deploy Back-End to Docker Hub
+![alt text](/report-resources/workflow_dockerhub_backend.png)
