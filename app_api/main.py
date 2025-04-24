@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException
-from app.models import Todo
+from models import Todo
 
 app = FastAPI()
 

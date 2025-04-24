@@ -20,8 +20,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /app
 
 # Copy requirements and install
-COPY --chown=appuser:appgroup app_api/requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+COPY --chown=appuser:appgroup app_api/requirements.txt ./app_api/requirements.txt
+RUN pip install --no-cache-dir -r app_api/requirements.txt
 
 # Copy app code
 COPY --chown=appuser:appgroup . .
