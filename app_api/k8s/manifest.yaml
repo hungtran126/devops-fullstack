@@ -24,7 +24,7 @@ spec:
         - name: dockerhub
       containers:
         - name: backend-api
-          image: hungtran1266/fast-api:1ed3a0a8ac25726f8850d57a636c9d8baac48a27
+          image: hungtran1266/fast-api:766b27e4e777950c64af3d69ad987879e4ebb613
           resources:
             requests:
               cpu: "256m"
