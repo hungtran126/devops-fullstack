@@ -20,11 +20,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /app
 
 # Copy requirements and install
-COPY --chown=appuser:appgroup requirements.txt .
+COPY --chown=appuser:appgroup app_api/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy app code
-COPY --chown=appuser:appgroup . .
+COPY --chown=appuser:appgroup app_api/ .
 
 # Change ownership and permissions
 RUN chmod -R 755 /app
