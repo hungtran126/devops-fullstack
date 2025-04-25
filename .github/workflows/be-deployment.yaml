@@ -6,7 +6,7 @@ on:
       - dev
       - main
 jobs:
-  docker:
+  docker-build-and-push:
     name: Build and Push Docker Image
     runs-on: ubuntu-latest
 
@@ -35,3 +35,38 @@ jobs:
       - name: Push Docker image to Docker hub
         run: |
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/fast-api:${{ github.sha }}
+  deploy-k8s:
+    needs: docker-build-and-push
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        
+      - name: Configuration the AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  
+          aws-region: ${{ secrets.AWS_REGION }}
+      
+      - name: Update kube config
+        run: aws eks update-kubeconfig --name ${{ github.ref_name }}-${{ secrets.EKS_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
+      - name: Apply the Kubernetes manifest
+        run: |
+          ENV=prod
+          if [ ${{ github.ref }} == 'refs/heads/dev' ]; then
+            ENV=dev
+          fi
+          echo "current env deploy: ${ENV}"
+          sed -i 's|ENV|${ENV}|g' api_api/k8s/manifest.yaml
+          sed -i 's|registry.hub.docker.com|hungtran1266/fast-api:${{ github.sha }}|g' api_api/k8s/manifest.yaml
+
+          echo "Viewing the manifest file:"
+          cat api_api/k8s/manifest.yaml
+
+          echo "Deploying the manifest file:"
+          kubectl apply -f api_api/k8s/manifest.yaml
+          kubectl rollout status deployment/fastapi-todo -n fastapi-todo
+          
+          
