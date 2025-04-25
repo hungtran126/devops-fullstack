@@ -61,14 +61,14 @@ jobs:
             ENV_TAG=${{ github.sha }}
           fi
           echo "current env deploy: ${ENV}"
-          sed -i 's|ENV|${ENV}|g' api_api/k8s/manifest.yaml
-          sed -i 's|registry.hub.docker.com|hungtran1266/fast-api:${{ github.sha }}|g' api_api/k8s/manifest.yaml
+          sed -i 's|ENV|${ENV}|g' app_api/k8s/manifest.yaml
+          sed -i 's|registry.hub.docker.com|hungtran1266/fast-api:${{ github.sha }}|g' app_api/k8s/manifest.yaml
 
           echo "Viewing the manifest file:"
-          cat api_api/k8s/manifest.yaml
+          cat app_api/k8s/manifest.yaml
 
           echo "Deploying the manifest file:"
-          kubectl apply -f api_api/k8s/manifest.yaml
-          kubectl rollout status deployment/fastapi-todo -n fastapi-todo
+          kubectl apply -f app_api/k8s/manifest.yaml
+          kubectl rollout status deployment/fastapi-todo -n fastapi-todo-${ENV}
           
           
