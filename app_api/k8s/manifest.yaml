@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: fastapi-todo
+  name: fastapi-todo-ENV
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: app-api
-  namespace: fastapi-todo
+  namespace: fastapi-todo-ENV
 spec:
   replicas: 1
   selector:
@@ -24,7 +24,7 @@ spec:
         - name: dockerhub
       containers:
         - name: backend-api
-          image: hungtran1266/fast-api:766b27e4e777950c64af3d69ad987879e4ebb613
+          image: hungtran1266/fast-api:ENV_TAG
           resources:
             requests:
               cpu: "256m"
@@ -40,7 +40,7 @@ spec:
 # kind: Certificate
 # metadata:
 #   name: app-tls-cert
-#   namespace: fastapi-todo
+#   namespace: fastapi-todo-ENV
 # spec:
 #   secretName: app-tls
 #   dnsNames:
@@ -56,7 +56,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: svc-backend-api
-  namespace: fastapi-todo
+  namespace: fastapi-todo-ENV
 spec:
   selector:
     app: backend-api
@@ -69,7 +69,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: my-app-ingress
-  namespace: fastapi-todo
+  namespace: fastapi-todo-ENV
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/rewrite-target: /

@@ -55,8 +55,10 @@ jobs:
       - name: Apply the Kubernetes manifest
         run: |
           ENV=prod
+          ENV_TAG=${{ github.sha }}
           if [ ${{ github.ref }} == 'refs/heads/dev' ]; then
             ENV=dev
+            ENV_TAG=${{ github.sha }}
           fi
           echo "current env deploy: ${ENV}"
           sed -i 's|ENV|${ENV}|g' api_api/k8s/manifest.yaml
