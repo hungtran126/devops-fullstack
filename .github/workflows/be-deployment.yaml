@@ -30,7 +30,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -f app_api/app.dockerfile  -t ${{ secrets.DOCKER_HUB_USERNAME }}/fast-api:${{ github.sha }} .
+          docker build -f app_api/Dockerfile  -t ${{ secrets.DOCKER_HUB_USERNAME }}/fast-api:${{ github.sha }} .
         
       - name: Push Docker image to Docker hub
         run: |
