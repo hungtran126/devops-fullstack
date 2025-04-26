@@ -68,6 +68,7 @@ jobs:
           cat app_api/k8s/manifest.yaml
 
           echo "Deploying the manifest file:"
+          kubectl apply -f https://github.com/cert-manager/cert-manager/releases/latest/download/cert-manager.yaml
           kubectl apply -f app_api/k8s/manifest.yaml
           kubectl rollout status deployment/fastapi-todo -n fastapi-todo-${ENV}
           

@@ -24,7 +24,7 @@ spec:
         - name: dockerhub
       containers:
         - name: backend-api
-          image: hungtran1266/fast-api:${ENV_TAG}
+          image: hungtran1266/fast-api:latest
           resources:
             requests:
               cpu: "256m"
@@ -35,6 +35,17 @@ spec:
           ports:
             - containerPort: 8000
               name: backend-api
+---
+apiVersion: cert-manager.io/v1
+kind: OriginIssuer
+metadata:
+  name: letsencrypt-ENV
+spec:
+  requestType: OriginECC
+  auth:
+    serviceKeyRef:
+      name: service-key
+      key: key
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
@@ -50,7 +61,7 @@ spec:
   issuerRef:
     group: cert-manager.k8s.cloudflare.com
     kind: OriginIssuer
-    name: prod-issuer
+    name: letsencrypt-ENV
 ---
 apiVersion: v1
 kind: Service
