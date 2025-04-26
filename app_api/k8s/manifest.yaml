@@ -24,7 +24,7 @@ spec:
         - name: dockerhub
       containers:
         - name: backend-api
-          image: hungtran1266/fast-api:ENV_TAG
+          image: hungtran1266/fast-api:${ENV_TAG}
           resources:
             requests:
               cpu: "256m"
@@ -35,22 +35,22 @@ spec:
           ports:
             - containerPort: 8000
               name: backend-api
-# ---
-# apiVersion: cert-manager.io/v1
-# kind: Certificate
-# metadata:
-#   name: app-tls-cert
-#   namespace: fastapi-todo-ENV
-# spec:
-#   secretName: app-tls
-#   dnsNames:
-#     - api.hungdevops.org
-#   duration: 8760h
-#   renewBefore: 24h
-#   issuerRef:
-#     group: cert-manager.k8s.cloudflare.com
-#     kind: OriginIssuer
-#     name: prod-issuer
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: app-tls-cert
+  namespace: fastapi-todo-ENV
+spec:
+  secretName: app-tls
+  dnsNames:
+    - api.hungdevops.org
+  duration: 8760h
+  renewBefore: 24h
+  issuerRef:
+    group: cert-manager.k8s.cloudflare.com
+    kind: OriginIssuer
+    name: prod-issuer
 ---
 apiVersion: v1
 kind: Service
