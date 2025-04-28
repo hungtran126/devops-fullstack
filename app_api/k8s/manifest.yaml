@@ -37,31 +37,46 @@ spec:
               name: backend-api
 ---
 apiVersion: cert-manager.io/v1
-kind: OriginIssuer
+kind: ClusterIssuer
 metadata:
   name: letsencrypt-ENV
 spec:
-  requestType: OriginECC
-  auth:
-    serviceKeyRef:
-      name: service-key
-      key: key
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: hungtran19122000@gmail.com   # <-- CHANGE THIS to your real email
+    privateKeySecretRef:
+      name: letsencrypt-ENV-account-key
+    solvers:
+    - http01:
+        ingress:
+          class: nginx
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: app-tls-cert
-  namespace: fastapi-todo-ENV
+  name: app-tls
+  namespace: default    # <-- Make sure it's in the same namespace as your app!
 spec:
   secretName: app-tls
-  dnsNames:
-    - api.hungdevops.org
-  duration: 8760h
-  renewBefore: 24h
   issuerRef:
-    group: cert-manager.k8s.cloudflare.com
-    kind: OriginIssuer
     name: letsencrypt-ENV
+    kind: ClusterIssuer
+  commonName: api.hungdevops.org
+  dnsNames:
+  - api.hungdevops.org
+# metadata:
+#   name: app-tls-cert
+#   namespace: fastapi-todo-ENV
+# spec:
+#   secretName: app-tls
+#   dnsNames:
+#     - api.hungdevops.org
+#   duration: 8760h
+#   renewBefore: 24h
+#   issuerRef:
+#     group: cert-manager.k8s.cloudflare.com
+#     kind: OriginIssuer
+#     name: letsencrypt-ENV
 ---
 apiVersion: v1
 kind: Service
