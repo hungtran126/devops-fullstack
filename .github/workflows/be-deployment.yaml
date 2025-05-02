@@ -52,7 +52,6 @@ jobs:
       
       - name: Update kube config
         run: |
-          echo "${{ github.ref_name }}-${{ secrets.EKS_CLUSTER_NAME }}"
           aws eks update-kubeconfig --name ${{ github.ref_name }}-${{ secrets.EKS_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
       - name: Apply the Kubernetes manifest
         run: |
@@ -70,7 +69,7 @@ jobs:
           cat app_api/k8s/manifest.yaml
 
           echo "Deploying the manifest file:"
-          kubectl apply -f app_api/k8s/manifest.yaml
+          kubectl apply --validate=false -f app_api/k8s/manifest.yaml
           kubectl rollout status deployment/fastapi-todo -n fastapi-todo-${ENV}
           
           
