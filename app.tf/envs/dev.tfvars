@@ -17,6 +17,6 @@ eks_config = {
   max_size            = 3
   min_size            = 1
   max_unavailable     = 1
-  instance_types      = ["t3.small"]
+  instance_types      = ["t3.micro"]
   eks_cluster_autoscaler_name = "dev-eks-cluster-autoscaler"
 }
