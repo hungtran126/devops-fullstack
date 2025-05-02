@@ -51,7 +51,9 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
       
       - name: Update kube config
-        run: aws eks update-kubeconfig --name ${{ github.ref_name }}-${{ secrets.EKS_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
+        run: |
+          echo "${{ github.ref_name }}-${{ secrets.EKS_CLUSTER_NAME }}"
+          aws eks update-kubeconfig --name ${{ github.ref_name }}-${{ secrets.EKS_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
       - name: Apply the Kubernetes manifest
         run: |
           ENV=prod
