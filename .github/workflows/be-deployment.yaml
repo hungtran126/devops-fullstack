@@ -53,6 +53,15 @@ jobs:
       - name: Update kube config
         run: |
           aws eks update-kubeconfig --name ${{ github.ref_name }}-${{ secrets.EKS_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
+
+      - name: Verify cluster access
+        run: |
+          kubectl version --short
+          kubectl get nodes
+
+      - name: Set KUBECONFIG path
+        run: echo "KUBECONFIG=$HOME/.kube/config" >> $GITHUB_ENV
+
       - name: Apply the Kubernetes manifest
         run: |
           ENV=prod
