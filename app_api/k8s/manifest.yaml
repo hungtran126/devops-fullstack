@@ -41,7 +41,7 @@ kind: Certificate
 metadata:
   name: app-tls-cert
   # namespace: fastapi-todo-ENV
-  # namespace: default
+  namespace: default
 spec:
   secretName: app-tls
   dnsNames:
