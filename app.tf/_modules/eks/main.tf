@@ -4,7 +4,10 @@ resource "aws_eks_cluster" "this" {
   vpc_config {
     subnet_ids = var.subnet_ids
   }
-  depends_on = [aws_iam_role_policy_attachment.eks_cluster_policy_attachment]
+  depends_on = [
+    aws_iam_role_policy_attachment.eks_cluster_policy_attachment,
+    aws_iam_role_policy_attachment.eks_cluster_policy_service_attachment
+  ]
 }
 
 # aws node group
