@@ -78,6 +78,6 @@ jobs:
 
           echo "Deploying the manifest file:"
           kubectl apply -f app_api/k8s/manifest.yaml
-          kubectl rollout status deployment/fastapi-todo -n fastapi-todo-${ENV}
+          kubectl rollout status deployment/app-api -n fastapi-todo-${ENV}
           
           
