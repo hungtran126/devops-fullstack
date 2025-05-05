@@ -65,10 +65,8 @@ jobs:
       - name: Apply the Kubernetes manifest
         run: |
           ENV=prod
-          ENV_TAG=${{ github.sha }}
           if [ ${{ github.ref }} == 'refs/heads/dev' ]; then
             ENV=dev
-            ENV_TAG=${{ github.sha }}
           fi
           echo "current env deploy: ${ENV}"
           sed -i 's|ENV|${ENV}|g' app_api/k8s/manifest.yaml
@@ -78,7 +76,7 @@ jobs:
           cat app_api/k8s/manifest.yaml
 
           echo "Deploying the manifest file:"
-          kubectl apply --validate=false -f app_api/k8s/manifest.yaml
+          kubectl apply -f app_api/k8s/manifest.yaml
           kubectl rollout status deployment/fastapi-todo -n fastapi-todo-${ENV}
           
           
