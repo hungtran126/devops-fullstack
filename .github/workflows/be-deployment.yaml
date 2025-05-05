@@ -69,8 +69,9 @@ jobs:
             ENV=dev
           fi
           echo "current env deploy: ${ENV}"
-          sed -i 's|ENV|${ENV}|g' app_api/k8s/manifest.yaml
-          sed -i 's|registry.hub.docker.com|hungtran1266/fast-api:${{ github.sha }}|g' app_api/k8s/manifest.yaml
+          
+          sed -i "s|fastapi-todo-ENV|fastapi-todo-${ENV}|g" app_api/k8s/manifest.yaml
+          sed -i "s|registry.hub.docker.com|hungtran1266/fast-api:${{ github.sha }}|g" app_api/k8s/manifest.yaml
 
           echo "Viewing the manifest file:"
           cat app_api/k8s/manifest.yaml
