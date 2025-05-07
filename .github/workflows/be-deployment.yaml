@@ -75,6 +75,7 @@ jobs:
             --namespace ${ENV} \
             --create-namespace \
             --values app_api/k8s/my-helm/values.yaml
+          kubectl rollout status deployment/app-api -n fastapi-todo-${ENV}
       # - name: Apply the Kubernetes manifest
       #   env:
       #     ENV: ${{ github.ref }}
