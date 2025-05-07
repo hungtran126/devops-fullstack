@@ -31,7 +31,7 @@ nodeSelector:
 # For secret.yaml
 secret:
   name: dockerhub
-  dockerConfigJson: CONTAINER_REGISTRY_BASE_URI
+  dockerConfigJson: BASE64_ENCODED_VALUE
   type: kubernetes.io/dockerconfigjson
 
 # For ingress.yaml
