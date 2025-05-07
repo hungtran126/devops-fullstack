@@ -72,8 +72,7 @@ jobs:
           helm upgrade --install fastapi app_api/k8s/my-helm \
             --namespace ${ENV} \
             --create-namespace \
-            --values app_api/k8s/my-helm/values.yaml \
-            -f app_api/k8s/my-helm/values.${ENV}.yaml
+            --values app_api/k8s/my-helm/values.yaml
       # - name: Apply the Kubernetes manifest
       #   env:
       #     ENV: ${{ github.ref }}
