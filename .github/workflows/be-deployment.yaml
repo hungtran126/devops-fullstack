@@ -61,13 +61,12 @@ jobs:
         with:
           version: v3.13.0
       - name: Helm Upgrade/Install
-        env:
-          BASE64_ENCODED_VALUE: ${{ secrets.BASE64_ENCODED_VALUE }}
         run: |
           ENV=prod
             if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
               ENV=dev
             fi
+          BASE64_ENCODED_VALUE=${{ secrets.BASE64_ENCODED_VALUE }}
           sed -i "s|TAG|${{ github.sha }}|g" app_api/k8s/my-helm/values.yaml
           sed -i "s|BASE64_ENCODED_VALUE|${BASE64_ENCODED_VALUE}|g" app_api/k8s/my-helm/values.yaml
           sed -i "s|ENV|${ENV}|g" app_api/k8s/my-helm/values.yaml
