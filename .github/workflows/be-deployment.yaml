@@ -63,15 +63,14 @@ jobs:
       - name: Helm Upgrade/Install
         run: |
           ENV=prod
-            if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
-              ENV=dev
-            fi
+          if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
+            ENV=dev
+          fi
           BASE64_ENCODED_VALUE=${{ secrets.BASE64_ENCODED_VALUE }}
           sed -i "s|TAG|${{ github.sha }}|g" app_api/k8s/my-helm/values.yaml
           sed -i "s|BASE64_ENCODED_VALUE|${BASE64_ENCODED_VALUE}|g" app_api/k8s/my-helm/values.yaml
           sed -i "s|ENV|${ENV}|g" app_api/k8s/my-helm/values.yaml
 
-          kubectl apply -f https://github.com/cert-manager/cert-manager/releases/latest/download/cert-manager.yaml
           helm upgrade --install fastapi app_api/k8s/my-helm \
             --namespace ${ENV} \
             --create-namespace \
