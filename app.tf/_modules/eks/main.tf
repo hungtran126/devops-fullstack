@@ -13,7 +13,7 @@ resource "aws_eks_cluster" "this" {
 # eks access entry
 resource "aws_eks_access_entry" "eks_access_entry" {
   cluster_name  = aws_eks_cluster.this.name
-  principal_arn = data.aws_caller_identity.current.arn
+  principal_arn = var.iam_user_arn
   type          = "STANDARD"
   tags = {
     "Name" = "iam-role-eks-access-entry"

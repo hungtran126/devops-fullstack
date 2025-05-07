@@ -13,3 +13,6 @@ variable "eks_default_tags" {
 variable "eks_config" {
   description = "The config of the EKS cluster"
 }
+variable "iam_user_arn" {
+  description = "The ARN of the IAM user"
+}

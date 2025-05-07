@@ -15,4 +15,5 @@ module "eks" {
   max_unavailable             = var.eks_config.max_unavailable
   instance_types              = var.eks_config.instance_types
   eks_cluster_autoscaler_name = var.eks_config.eks_cluster_autoscaler_name
+  iam_user_arn                = var.iam_user_arn
 }

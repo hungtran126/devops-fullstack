@@ -20,3 +20,4 @@ eks_config = {
   instance_types      = ["t3.micro"]
   eks_cluster_autoscaler_name = "main-eks-cluster-autoscaler"
 }
+iam_user_arn = "arn:aws:iam::025066273464:user/tf-devops"
