@@ -67,8 +67,8 @@ jobs:
         run: |
           sed -i "s|TAG|${{ github.sha }}|g" app_api/k8s/my-helm/values.yaml
           sed -i "s|BASE64_ENCODED_VALUE|${BASE64_ENCODED_VALUE}|g" app_api/k8s/my-helm/values.yaml
-          sed -i "s|ENV|${ENV}|g" app_api/k8s/my-helm/values.${ENV}.yaml
-          
+          sed -i "s|ENV|${ENV}|g" app_api/k8s/my-helm/values.yaml
+
           helm upgrade --install fastapi app_api/k8s/my-helm \
             --namespace ${ENV} \
             --create-namespace \
