@@ -19,3 +19,5 @@ data "aws_iam_policy_document" "eks_cluster_autoscaler_assume_role_policy" {
     }
   }
 }
+
+data "aws_caller_identity" "current" {}

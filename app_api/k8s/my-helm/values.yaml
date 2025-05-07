@@ -1,0 +1,80 @@
+namespace: fastapi-todo-ENV
+# For deployment.yaml
+replicaCount: 1
+
+appName: backend-api
+
+image:
+  repository: hungtran1266/fast-api
+  tag: TAG
+
+service:
+  containerPort: 8000
+  port: 80
+  type: ClusterIP
+  name: svc-backend-api
+
+imagePullSecrets:
+  - name: dockerhub
+
+resources: 
+  requests:
+    cpu: "256m"
+    memory: "512Mi"
+  limits:
+    memory: "1024Mi"
+    cpu: "512m"
+
+nodeSelector:
+  "kubernetes.io/os": linux
+
+# For secret.yaml
+secret:
+  name: dockerhub
+  dockerConfigJson: CONTAINER_REGISTRY_BASE_URI
+  type: kubernetes.io/dockerconfigjson
+
+# For ingress.yaml
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    cert-manager.io/issuer: prod-issuer
+    cert-manager.io/issuer-kind: OriginIssuer
+    cert-manager.io/issuer-group: cert-manager.k8s.cloudflare.com
+    external-dns.alpha.kubernetes.io/hostname: api.hungdevops.org
+    external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
+    cert-manager.io/cluster-issuer: "prod-issuer"
+    alb.ingress.kubernetes.io/scheme: "internet-facing"
+    alb.ingress.kubernetes.io/target-type: "ip"
+  hosts:
+    - host: api.hungdevops.org
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: svc-backend-api
+              port:
+                number: 80
+  tls:
+   - secretName: app-tls
+     hosts:
+       - api.hungdevops.org
+
+# For certificate.yaml
+certificate:
+  enabled: true
+  secretName: app-tls
+  name: app-tls-cert
+  namespace: default
+  dnsNames:
+    - api.hungdevops.org
+  duration: 8760h
+  renewBefore: 24h
+  issuerRef:
+    group: cert-manager.k8s.cloudflare.com
+    kind: OriginIssuer
+    name: prod-issuer

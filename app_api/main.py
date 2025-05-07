@@ -3,7 +3,14 @@ from models import Todo
 
 app = FastAPI()
 
-todos = []
+todos = [
+    {
+        "id": 1,
+        "title": "Buy groceries",
+        "description": "Buy groceries",
+        "completed": False
+    }
+]
 
 @app.get("/todos")
 def get_todos():

@@ -10,6 +10,21 @@ resource "aws_eks_cluster" "this" {
   ]
 }
 
+# eks access entry
+resource "aws_eks_access_entry" "eks_access_entry" {
+  cluster_name  = aws_eks_cluster.this.name
+  principal_arn = data.aws_caller_identity.current.arn
+  type          = "STANDARD"
+  tags = {
+    "Name" = "iam-role-eks-access-entry"
+    key    = "hungtran"
+    value  = "owned"
+  }
+  depends_on = [
+    aws_eks_cluster.this
+  ]
+}
+
 # aws node group
 resource "aws_eks_node_group" "eks-node-group" {
   cluster_name    = aws_eks_cluster.this.name
