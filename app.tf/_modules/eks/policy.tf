@@ -17,7 +17,6 @@ resource "aws_iam_role" "eks_cluster_role" {
     ]
   })
 }
-
 resource "aws_iam_role" "fluentbit_irsa" {
   name = "fluentbit-irsa-role"
   assume_role_policy = data.aws_iam_policy_document.fluentbit_assume_role.json

@@ -28,14 +28,14 @@ data "aws_iam_policy_document" "fluentbit_assume_role" {
 
     principals {
       type        = "Federated"
-      identifiers = [module.eks.oidc_provider_arn]
+      identifiers = [aws_iam_openid_connect_provider.eks.arn]
     }
 
     actions = ["sts:AssumeRoleWithWebIdentity"]
 
     condition {
       test     = "StringEquals"
-      variable = "${module.eks.oidc_provider_url}:sub"
+      variable = "${replace(aws_iam_openid_connect_provider.eks.url, "https://", "")}:sub"
       values   = ["system:serviceaccount:kube-system:fluentbit"]
     }
   }
