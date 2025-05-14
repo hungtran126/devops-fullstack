@@ -12,6 +12,7 @@ output "aws_iam_role_policy_attachment" {
     nodes_AmazonEKSWorkerNodePolicy          = aws_iam_role_policy_attachment.nodes-AmazonEKSWorkerNodePolicy
     nodes_AmazonEKS_CNI_Policy               = aws_iam_role_policy_attachment.nodes-AmazonEKS_CNI_Policy
     nodes_AmazonEC2ContainerRegistryReadOnly = aws_iam_role_policy_attachment.nodes-AmazonEC2ContainerRegistryReadOnly
+    nodes_CloudWatchAgentServerPolicy        = aws_iam_role_policy_attachment.nodes-CloudWatchAgentServerPolicy
   }
 }
 
