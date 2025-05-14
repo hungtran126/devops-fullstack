@@ -18,6 +18,31 @@ resource "aws_iam_role" "eks_cluster_role" {
   })
 }
 
+resource "aws_iam_role" "fluentbit_irsa" {
+  name = "fluentbit-irsa-role"
+  assume_role_policy = data.aws_iam_policy_document.fluentbit_assume_role.json
+}
+
+resource "aws_iam_policy" "cloudwatch_logs_policy" {
+  name        = "EKS_CloudWatchLogs_Policy"
+  description = "Policy for EKS to push logs to CloudWatch"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "logs:CreateLogStream",
+          "logs:PutLogEvents",
+          "logs:CreateLogGroup"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
 # role for nodegroup
 resource "aws_iam_role" "nodes" {
   name = "eks-node-group-nodes"
@@ -32,6 +57,11 @@ resource "aws_iam_role" "nodes" {
     }]
     Version = "2012-10-17"
   })
+}
+
+resource "aws_iam_role_policy_attachment" "attach_logs_policy" {
+  policy_arn = aws_iam_policy.cloudwatch_logs_policy.arn
+  role       = aws_iam_role.fluentbit_irsa.name
 }
 
 resource "aws_iam_role_policy_attachment" "eks_cluster_policy_attachment" {

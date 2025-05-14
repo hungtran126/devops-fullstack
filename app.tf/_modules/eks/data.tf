@@ -21,3 +21,22 @@ data "aws_iam_policy_document" "eks_cluster_autoscaler_assume_role_policy" {
 }
 
 data "aws_caller_identity" "current" {}
+
+data "aws_iam_policy_document" "fluentbit_assume_role" {
+  statement {
+    effect = "Allow"
+
+    principals {
+      type        = "Federated"
+      identifiers = [module.eks.oidc_provider_arn]
+    }
+
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "${module.eks.oidc_provider_url}:sub"
+      values   = ["system:serviceaccount:kube-system:fluentbit"]
+    }
+  }
+}

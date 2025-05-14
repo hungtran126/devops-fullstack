@@ -2,6 +2,7 @@ output "aws_iam_role" {
   value = {
     eks_cluster_role    = aws_iam_role.eks_cluster_role
     eks_node_group_role = aws_iam_role.nodes
+    eks_fluentbit_role  = aws_iam_role.fluentbit_irsa
   }
 }
 
@@ -13,6 +14,7 @@ output "aws_iam_role_policy_attachment" {
     nodes_AmazonEKS_CNI_Policy               = aws_iam_role_policy_attachment.nodes-AmazonEKS_CNI_Policy
     nodes_AmazonEC2ContainerRegistryReadOnly = aws_iam_role_policy_attachment.nodes-AmazonEC2ContainerRegistryReadOnly
     nodes_CloudWatchAgentServerPolicy        = aws_iam_role_policy_attachment.nodes-CloudWatchAgentServerPolicy
+    attach_logs_policy                     = aws_iam_role_policy_attachment.attach_logs_policy
   }
 }
 
