@@ -28,3 +28,8 @@ output "aws_eks_cluster" {
 output "eks_cluster_autoscaler_arn" {
   value = aws_iam_role.eks_cluster_autoscaler.arn
 }
+
+output "fluentbit_irsa_role_arn" {
+  description = "IAM Role ARN for Fluent Bit with IRSA"
+  value       = aws_iam_role.fluentbit_irsa.arn
+}
